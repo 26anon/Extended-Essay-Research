@@ -49,7 +49,7 @@ def curve_bit_length(curve):
             return mapping.get(curve.name, None)
 
 
-def run_experiment(curve_names, samples_per_curve=5, max_secret=5000, max_k=1000, out_csv="ecc_results.csv"):
+def run_experiment(curve_names, samples_per_curve=5, max_secret=1000, max_k=1000, out_csv="ecc_results.csv"):
     """
     curve_names: list of tinyec curve names (e.g., ["secp128r1", "secp160r1"])
     samples_per_curve: how many random secrets to test per curve
