@@ -113,7 +113,7 @@ def factor_semiprime(n: int) -> Tuple[Optional[int], Optional[int]]:
 def run_experiment(bit_lengths: List[int], samples_per_size: int = 10, out_csv: str = "factor_results.csv"):
     random_seed = 42
     random.seed(random_seed)
-    secrets_generator = random_seed  # note: secrets uses system randomness; for reproducibility, store seeds
+    secrets_generator = random_seed  
     header = ["bit_length", "sample_index", "N", "p_true", "q_true", "factor1", "factor2", "time_s", "success"]
     with open(out_csv, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
@@ -139,42 +139,14 @@ def run_experiment(bit_lengths: List[int], samples_per_size: int = 10, out_csv: 
                 print(f"bits={bits} idx={i} time={elapsed:.4f}s success={success}")
     print(f"\nResults written to {out_csv}")
 
-# ---------- Plotting helper (optional) ----------
-def quick_plot(csv_file: str):
-    try:
-        import matplotlib.pyplot as plt
-    except ImportError:
-        print("matplotlib not installed; install via `pip install matplotlib` to enable plotting.")
-        return
-    import math
-    xs = []
-    ys = []
-    with open(csv_file, newline="") as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            if row["success"] == "True":
-                xs.append(int(row["bit_length"]))
-                ys.append(float(row["time_s"]))
-    if not xs:
-        print("No successful measurements to plot.")
-        return
-    plt.scatter(xs, ys, alpha=0.7)
-    plt.yscale("log")
-    plt.xlabel("bit length")
-    plt.ylabel("time (seconds, log scale)")
-    plt.title("Factoring time (successful runs)")
-    plt.grid(True)
-    plt.show()
 
 # ---------- Main ----------
 if __name__ == "__main__":
-    # Example default parameters; change as needed
-    # Choose bit_lengths small enough so your laptop can complete them
-    BIT_LENGTHS = [16, 20, 24, 28, 32, 36]   # start small; increase as you can tolerate runtime
+
+    BIT_LENGTHS = [16, 20, 24, 28, 32, 36]   
     SAMPLES = 8
     OUT_CSV = "factor_results.csv"
 
-    # optional CLI overrides: python3 experiment_factor.py 24,28 10
     if len(sys.argv) >= 2:
         bits_arg = sys.argv[1]
         try:
@@ -189,4 +161,3 @@ if __name__ == "__main__":
             pass
     print(f"Running factoring experiment with bit lengths: {BIT_LENGTHS}, samples per size: {SAMPLES}")
     run_experiment(BIT_LENGTHS, SAMPLES, OUT_CSV)
-    # optional: quick_plot(OUT_CSV)
